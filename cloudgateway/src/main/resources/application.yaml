@@ -1,0 +1,71 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: API-GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+        - id: CMS_SERVICE
+          uri: lb://CMS-SERVICE
+          predicates:
+            - Path=/api/v1/cms/**
+          filters:
+            - StripPrefix=3
+        - id: CMS_SERVICE_ADMIN
+          uri: lb://CMS-ADMIN-SERVICE
+          predicates:
+            - Path=/api/v1/cms-admin/**
+          filters:
+            - StripPrefix=3 # loại bỏ cms-admin-service ở đầu
+        - id: MONITOR_SERVICE
+          uri: lb://MONITOR-SERVICE
+          predicates:
+            - Path=/api/v1/monitor/**
+          filters:
+            - StripPrefix=3
+        - id: HOME_SERVICE
+          uri: lb://HOME-SERVICE
+          predicates:
+            - Path=/api/v1/home/**
+          filters:
+            - StripPrefix=3 # loại bỏ home-service ở đầu
+        - id: CACHE_COLEARN_SERVICE
+          uri: lb://CACHE-COLEARN-SERVICE
+          predicates:
+            - Path=/api/v1/cache/**
+          filters:
+            - StripPrefix=3 # loại bỏ cache-service ở đầu
+        - id: TASK_SERVICE
+          uri: lb://TASK-SERVICE
+          predicates:
+            - Path=/api/v1/task/**
+          filters:
+            - StripPrefix=3 # loại bỏ cache-service ở đầu
+        - id: TASK-CHECKIN-SERVICE
+          uri: lb://TASK-CHECKIN-SERVICE
+          predicates:
+            - Path=/api/v1/task-checkin/**
+          filters:
+            - StripPrefix=3 # loại bỏ cache-service ở đầu
+        - id: TASK-VIDEO-SERVICE
+          uri: lb://TASK-VIDEO-SERVICE
+          predicates:
+            - Path=/api/v1/video-task/**
+          filters:
+            - StripPrefix=2 # loại bỏ cache-service ở đầu
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/  # URL của Eureka Server
+    fetch-registry: true
+    register-with-eureka: true
+# Cấu hình về log level (tuỳ chọn)
+#logging:
+#  level:
+#    org.springframework.web: DEBUG
+#    org.springframework.cloud.gateway: TRACE
+#    org.springframework.security: DEBUG
+#    root: info
+
+

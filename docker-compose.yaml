@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres-container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: demo
+    ports:
+      - "5432:5432"  # Mở cổng 5432 để truy cập từ bên ngoài
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  redis-project-postgre:
+    image: redis:7.2.3
+    container_name: redis--project-postgre
+    hostname: redis
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes  # Sửa lỗi chính tả
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL  # Sử dụng dấu phẩy
+    networks:
+      - backend
+
+#  api-service:
+#    container_name: api-service
+#    build:
+#      context: service-core
+#      dockerfile: service-core/Dockerfile
+#    ports:
+#      - '8080:8081'
+#    networks:
+#      - backend
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-container:5432/demo?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: 123456
+#      SPRING_REDIS_HOST: redis
+#      SPRING_REDIS_PORT: 6379
+#    depends_on:
+#    - postgres
+#    - redis-project-postgre
+networks:
+  backend:
+    name: backend
+    driver: bridge
+volumes:
+  postgres_data:
