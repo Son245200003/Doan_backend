@@ -10,4 +10,6 @@ public interface MedicalRecordService {
     MedicalRecord createRecord(MedicalRecord record);
     MedicalRecord updateRecord(Long id, MedicalRecord record);
     void deleteRecord(Long id);
-}
+    public List<MedicalRecord> getMedicalRecordByPatient(long id);
+
+    }

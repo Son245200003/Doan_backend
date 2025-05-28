@@ -26,7 +26,10 @@ public class AdmissionController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<?> getByIdPatient(@PathVariable Long id) {
+        return ResponseEntity.ok(admissionService.findByPatientId(id));
+    }
     @PostMapping
     public ResponseEntity<Admission> create(@RequestBody Admission admission) {
         return ResponseEntity.ok(admissionService.createAdmission(admission));

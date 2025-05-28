@@ -1,5 +1,6 @@
 package com.example.project_posgre.repository;
 
+import com.example.project_posgre.models.Service;
 import com.example.project_posgre.models.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,5 +14,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
     long countByStaffCodeStartingWith(String prefix);
     @Query("SELECT s FROM Staff s WHERE s.position = 'DOCTOR'")
     List<Staff> findDoctors();
+    List<Staff> findAllByOrderByIdAsc();
 
 }

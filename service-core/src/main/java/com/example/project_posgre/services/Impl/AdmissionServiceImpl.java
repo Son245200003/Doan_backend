@@ -27,6 +27,7 @@ public class AdmissionServiceImpl implements AdmissionService {
 
     @Override
     public Admission createAdmission(Admission admission) {
+        admission.setStatus(Admission.AdmissionStatus.TREATING);
         return admissionRepository.save(admission);
     }
 
@@ -50,5 +51,8 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public void deleteAdmission(Long id) {
         admissionRepository.deleteById(id);
+    }
+    public List<Admission> findByPatientId(Long patientId){
+        return admissionRepository.findByPatientId(patientId);
     }
 }

@@ -19,7 +19,11 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     @Override
     public List<MedicalRecord> getAllRecords() {
-        return medicalRecordRepository.findAll();
+        return medicalRecordRepository.findAllByOrderByIdAsc();
+    }
+    @Override
+    public List<MedicalRecord> getMedicalRecordByPatient(long id) {
+        return medicalRecordRepository.findByPatientId(id);
     }
 
     @Override

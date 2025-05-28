@@ -2,14 +2,14 @@ package com.example.project_posgre.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "beds")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bed {
@@ -19,7 +19,6 @@ public class Bed {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
-    @JsonBackReference
     private Room room;
 
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package com.example.project_posgre.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "prescriptions")
@@ -27,6 +30,10 @@ public class Prescription {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient; // Khóa ngoại với bảng Patient
 
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference // Nếu muốn xử lý vòng lặp khi serialize JSON
+    private List<PrescriptionDetail> details = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Staff doctor; // Khóa ngoại với bảng Staff (bác sĩ)
@@ -43,9 +50,6 @@ public class Prescription {
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes; // Ghi chú
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private Status status; // Trạng thái (PENDING, PROCESSING, DISPENSED, CANCELLED)
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -55,7 +59,4 @@ public class Prescription {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; // Ngày cập nhật
 
-    public enum Status {
-        PENDING, PROCESSING, DISPENSED, CANCELLED
-    }
 }

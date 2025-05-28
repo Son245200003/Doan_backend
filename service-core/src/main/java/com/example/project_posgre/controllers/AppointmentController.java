@@ -30,7 +30,10 @@ public class AppointmentController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<?> getByIdPatient(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findByPatientId(id));
+    }
     @PostMapping
     @PreAuthorize("permitAll()")
     public ResponseEntity<Appointment> create(@RequestBody AppointmentRequestDTO appointment, @AuthenticationPrincipal User user) {

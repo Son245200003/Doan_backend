@@ -50,6 +50,6 @@ public class MedicineGroupServiceImpl implements MedicineGroupService {
 
     @Override
     public List<MedicineGroup> getAll() {
-        return medicineGroupRepository.findAll();
+        return medicineGroupRepository.findAllByOrderByIdAsc();
     }
 }

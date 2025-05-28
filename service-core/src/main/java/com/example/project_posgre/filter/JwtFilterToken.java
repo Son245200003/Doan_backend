@@ -90,7 +90,7 @@ public class JwtFilterToken extends OncePerRequestFilter {
 
         String requestPath = request.getServletPath();
         String requestMethod = request.getMethod();
-        if (requestPath.startsWith("/"+apiPrefix + "/auth/")) {
+        if (requestPath.startsWith("/"+apiPrefix + "/auth/") || requestPath.startsWith("/"+apiPrefix + "/staff/files/")) {
             return true;
         }
         for (Map.Entry<String, List<String>> entry : bypassTokens.entrySet()) {

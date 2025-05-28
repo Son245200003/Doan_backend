@@ -39,4 +39,9 @@ public class PrescriptionDetailServiceImpl implements PrescriptionDetailService 
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<PrescriptionDetail> findAllByIdPrescription(Long id) {
+        return repository.findAllByPrescriptionId(id);
+    }
 }

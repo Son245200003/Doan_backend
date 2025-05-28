@@ -25,7 +25,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> getAll() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAllByOrderByIdAsc();
     }
 
     @Override
@@ -75,5 +75,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void delete(Long id) {
         appointmentRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Appointment> findByPatientId(Long id) {
+        return appointmentRepository.findByPatientId(id);
     }
 }

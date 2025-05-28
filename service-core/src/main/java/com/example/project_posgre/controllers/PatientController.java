@@ -1,13 +1,16 @@
 package com.example.project_posgre.controllers;
 
 import com.example.project_posgre.models.Patient;
+import com.example.project_posgre.services.Impl.SupabaseService;
 import com.example.project_posgre.services.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PatientController {
     private final PatientService patientService;
+    private final SupabaseService supabaseService;
 
     @GetMapping
     public List<Patient> getAllPatients() {
@@ -55,4 +59,10 @@ public class PatientController {
 
         return patientService.findByIdentityCardOrPhone(identityCard, phoneNumber);
     }
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
+        String fileUrl = supabaseService.uploadToSupabase(file);
+        return ResponseEntity.ok(fileUrl);
+    }
+
 }

@@ -127,6 +127,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<Invoice> getAllInvoices() {
-        return invoiceRepository.findAll();
+        return invoiceRepository.findAllByOrderByIdAsc();
     }
 }

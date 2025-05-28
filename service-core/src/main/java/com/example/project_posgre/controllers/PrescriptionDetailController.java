@@ -18,7 +18,10 @@ public class PrescriptionDetailController {
     public List<PrescriptionDetail> getAll() {
         return service.findAll();
     }
-
+    @GetMapping("/prescription/{id}")
+    public List<PrescriptionDetail> getByIdPrescription(@PathVariable Long id) {
+        return service.findAllByIdPrescription(id);
+    }
     @GetMapping("/{id}")
     public PrescriptionDetail getById(@PathVariable Long id) {
         return service.findById(id);

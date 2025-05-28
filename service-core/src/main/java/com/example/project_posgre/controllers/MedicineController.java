@@ -2,7 +2,9 @@ package com.example.project_posgre.controllers;
 
 import com.example.project_posgre.dtos.requests.MedicineRequest;
 import com.example.project_posgre.models.Medicine;
+import com.example.project_posgre.repository.MedicineRepository;
 import com.example.project_posgre.services.MedicineService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,13 +12,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/medicines")
+@RequiredArgsConstructor
 public class MedicineController {
 
     private final MedicineService medicineService;
+    private final MedicineRepository medicineRepository;
 
-    public MedicineController(MedicineService medicineService) {
-        this.medicineService = medicineService;
-    }
 
     @GetMapping
     public List<Medicine> getAllMedicines() {
@@ -43,4 +44,18 @@ public class MedicineController {
         medicineService.deleteMedicine(id);
         return ResponseEntity.noContent().build();
     }
+    // MedicineController.java (hoặc MedicineImportController.java)
+    @PostMapping("/{id}/import")
+    public ResponseEntity<Medicine> importMedicine(
+            @PathVariable Long id,
+            @RequestParam Integer quantity) {
+        Medicine medicine = medicineService.getMedicineById(id);
+        if (medicine == null) {
+            return ResponseEntity.notFound().build();
+        }
+        medicine.setStockQuantity(medicine.getStockQuantity() + quantity);
+        medicineRepository.save(medicine);
+        return ResponseEntity.ok(medicine);
+    }
+
 }

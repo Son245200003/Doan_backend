@@ -1,5 +1,6 @@
 package com.example.project_posgre.repository;
 
+import com.example.project_posgre.models.Staff;
 import com.example.project_posgre.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findByCreatedAtBetween(LocalDateTime begin, LocalDateTime end);
 
     Optional<User> findByEmail(String email);
+    List<User> findAllByOrderByIdAsc();
+
 }

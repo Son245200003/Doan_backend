@@ -1,30 +1,33 @@
 package com.example.project_posgre.services.Impl;
 
 import com.example.project_posgre.dtos.requests.StaffRequestDTO;
+import com.example.project_posgre.models.Attachment;
 import com.example.project_posgre.models.Department;
 import com.example.project_posgre.models.Staff;
 import com.example.project_posgre.models.User;
+import com.example.project_posgre.repository.AttachmentRepository;
 import com.example.project_posgre.repository.DepartmentRepository;
 import com.example.project_posgre.repository.StaffRepository;
 import com.example.project_posgre.repository.UserRepository;
 import com.example.project_posgre.services.StaffService;
+import com.example.project_posgre.utils.FileStorageUtil;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StaffServiceImpl implements StaffService {
 
     private final StaffRepository staffRepository;
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
-
-    public StaffServiceImpl(StaffRepository staffRepository, UserRepository userRepository, DepartmentRepository departmentRepository) {
-        this.staffRepository = staffRepository;
-        this.userRepository = userRepository;
-        this.departmentRepository = departmentRepository;
-    }
+    private final AttachmentRepository attachmentRepository;
 
     @Override
     public Staff createStaff(StaffRequestDTO dto) {
@@ -58,7 +61,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public List<Staff> getAllStaff() {
-        return staffRepository.findAll();
+        return staffRepository.findAllByOrderByIdAsc();
     }
 
     @Override
@@ -109,5 +112,21 @@ public class StaffServiceImpl implements StaffService {
         } else {
             staff.setDepartment(null);
         }
+    }
+    public Attachment uploadAttachment(Long staffId, MultipartFile file) throws IOException {
+        Staff staff = staffRepository.findById(staffId)
+                .orElseThrow(() -> new RuntimeException("Staff not found"));
+
+        String uniqueFilename = FileStorageUtil.storeFile(file);
+        String fileUrl = FileStorageUtil.getFileUrl(uniqueFilename);
+
+        Attachment attachment = new Attachment();
+        attachment.setStaff(staff);
+        attachment.setFileName(file.getOriginalFilename());
+        attachment.setFileType(file.getContentType());
+        attachment.setFileSize(file.getSize());
+        attachment.setUrl(fileUrl);
+        attachment.setUploadedAt(LocalDateTime.now());
+        return attachmentRepository.save(attachment);
     }
 }

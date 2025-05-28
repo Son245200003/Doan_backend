@@ -26,9 +26,6 @@ public class Medicine {
     @JoinColumn(name = "medicine_group_id")
     private MedicineGroup medicineGroup;
 
-    @Column(name = "active_ingredient")
-    private String activeIngredient;
-
     private String unit;
     private BigDecimal price;
 
@@ -38,13 +35,8 @@ public class Medicine {
     @Column(name = "expiry_date")
     private Date expiryDate;
 
-    private String supplier;
-
     @Column(columnDefinition = "TEXT")
     private String description;
-
-    @Column(columnDefinition = "TEXT")
-    private String notes;
 
     @Enumerated(EnumType.STRING)
     private MedicineStatus status;

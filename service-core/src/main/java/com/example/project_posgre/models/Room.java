@@ -1,5 +1,6 @@
 package com.example.project_posgre.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,7 +39,7 @@ public class Room {
     private RoomStatus status;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Bed> beds;
 
     @Column(name = "created_at")

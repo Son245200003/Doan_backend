@@ -8,4 +8,5 @@ public interface PrescriptionDetailService {
     PrescriptionDetail save(PrescriptionDetail detail);
     PrescriptionDetail update(Long id, PrescriptionDetail detail);
     void delete(Long id);
+    List<PrescriptionDetail> findAllByIdPrescription(Long id);
 }

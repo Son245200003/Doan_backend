@@ -23,13 +23,17 @@ public class MedicalRecordController {
     public List<MedicalRecord> getAllRecords() {
         return medicalRecordService.getAllRecords();
     }
+    @GetMapping("/patients/{id}")
+    public List<MedicalRecord> getAllRecordsByPatientId(@PathVariable Long id) {
+        return medicalRecordService.getMedicalRecordByPatient(id);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<MedicalRecord> getRecordById(@PathVariable Long id) {
         return ResponseEntity.ok(medicalRecordService.getRecordById(id));
     }
 
-    @PostMapping
+    @PostMapping(consumes = {"application/json", "application/json;charset=UTF-8"})
     public ResponseEntity<MedicalRecord> createRecord(@RequestBody MedicalRecord record, @AuthenticationPrincipal User user) {
         System.out.println(user.getPhoneNumber());
         return ResponseEntity.ok(medicalRecordService.createRecord(record));

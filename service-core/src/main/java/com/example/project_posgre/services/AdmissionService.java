@@ -11,4 +11,5 @@ public interface AdmissionService {
     Admission createAdmission(Admission admission);
     Admission updateAdmission(Long id, Admission admission);
     void deleteAdmission(Long id);
+    List<Admission> findByPatientId(Long patientId);
 }

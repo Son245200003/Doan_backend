@@ -13,8 +13,6 @@ public class MedicineRequest {
 
     private Long medicineGroup;
 
-    private String activeIngredient;
-
     private String unit;
     private BigDecimal price;
 
@@ -22,11 +20,7 @@ public class MedicineRequest {
 
     private Date expiryDate;
 
-    private String supplier;
-
     private String description;
-
-    private String notes;
 
     private Medicine.MedicineStatus status;
 }
