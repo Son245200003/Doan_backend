@@ -1,6 +1,7 @@
 package com.example.project_posgre.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,9 +34,6 @@ public class Invoice {
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
-    @Enumerated(EnumType.STRING)
-    private InvoiceSource source;
-
     @Column(name = "invoice_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date invoiceDate;
@@ -65,6 +63,7 @@ public class Invoice {
     private User createdBy;
 
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<InvoiceDetail> invoiceDetails;
 
     @Column(name = "created_at")
@@ -82,9 +81,6 @@ public class Invoice {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
-    }
-    public enum InvoiceSource {
-        CLINIC, INPATIENT
     }
 
     public enum PaymentMethod {

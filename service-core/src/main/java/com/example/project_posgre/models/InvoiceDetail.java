@@ -1,5 +1,6 @@
 package com.example.project_posgre.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class InvoiceDetail {
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
+    @JsonBackReference
     private Invoice invoice;
 
     @ManyToOne

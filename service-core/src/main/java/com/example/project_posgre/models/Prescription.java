@@ -59,4 +59,11 @@ public class Prescription {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; // Ngày cập nhật
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status = Status.UNPAID; // UNPAID/PAID
+
+    public enum Status {
+        UNPAID, PAID
+    }
 }

@@ -3,11 +3,15 @@ package com.example.project_posgre.controllers;
 import com.example.project_posgre.dtos.requests.StaffRequestDTO;
 import com.example.project_posgre.models.Attachment;
 import com.example.project_posgre.models.Staff;
+import com.example.project_posgre.repository.AttachmentRepository;
+import com.example.project_posgre.services.Impl.SupabaseService;
 import com.example.project_posgre.services.StaffService;
 import com.example.project_posgre.utils.FileStorageUtil;
+import org.json.HTTP;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,9 +30,13 @@ import java.util.List;
 public class StaffController {
 
     private final StaffService staffService;
+    private final SupabaseService supabaseService;
+    private final AttachmentRepository attachmentRepository;
 
-    public StaffController(StaffService staffService) {
+    public StaffController(StaffService staffService, SupabaseService supabaseService, AttachmentRepository attachmentRepository) {
         this.staffService = staffService;
+        this.supabaseService = supabaseService;
+        this.attachmentRepository = attachmentRepository;
     }
 
     @PostMapping
@@ -69,6 +77,10 @@ public class StaffController {
     ) throws IOException {
         return ResponseEntity.ok(staffService.uploadAttachment(staffId, file));
     }
+    @PostMapping("/upload/{staffId}")
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @PathVariable Long staffId) throws IOException {
+        return ResponseEntity.ok(staffService.uploadAttachment(staffId, file));
+    }
     @GetMapping("/files/{fileName:.+}")
     public ResponseEntity<?> viewFile(@PathVariable String fileName) {
         try {
@@ -96,5 +108,10 @@ public class StaffController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+    @DeleteMapping("/attachments/{attachmentId}")
+    public ResponseEntity<?> deleteAtachment( @PathVariable Long attachmentId) throws IOException {
+        attachmentRepository.deleteById(attachmentId);
+        return ResponseEntity.ok().build();
     }
 }

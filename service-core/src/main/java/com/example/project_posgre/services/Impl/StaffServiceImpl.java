@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class StaffServiceImpl implements StaffService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
     private final AttachmentRepository attachmentRepository;
+    private final SupabaseService supabaseService;
 
     @Override
     public Staff createStaff(StaffRequestDTO dto) {
@@ -116,16 +118,17 @@ public class StaffServiceImpl implements StaffService {
     public Attachment uploadAttachment(Long staffId, MultipartFile file) throws IOException {
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new RuntimeException("Staff not found"));
+        String uuid = UUID.randomUUID().toString();
+        String originalFileName = file.getOriginalFilename();
+        String newFileName = uuid + "-" + originalFileName;
 
-        String uniqueFilename = FileStorageUtil.storeFile(file);
-        String fileUrl = FileStorageUtil.getFileUrl(uniqueFilename);
-
+        String fileURl = supabaseService.uploadToSupabase(file);
         Attachment attachment = new Attachment();
         attachment.setStaff(staff);
         attachment.setFileName(file.getOriginalFilename());
         attachment.setFileType(file.getContentType());
         attachment.setFileSize(file.getSize());
-        attachment.setUrl(fileUrl);
+        attachment.setUrl(fileURl);
         attachment.setUploadedAt(LocalDateTime.now());
         return attachmentRepository.save(attachment);
     }

@@ -6,6 +6,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Service
 public class SupabaseService {
@@ -14,8 +15,12 @@ public class SupabaseService {
     private static final String SERVICE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzampmdWludHZ6emxqZmF1b2pqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0ODMxODUzOCwiZXhwIjoyMDYzODk0NTM4fQ.ub-xAyCrjsdJCRlQjgR0OCa1-zczdkK565ikBbmbqAQ"; // Lấy ở Supabase Settings > API > service_role
 
     public String uploadToSupabase(MultipartFile file) throws IOException {
-        String objectPath = "uploads/" + file.getOriginalFilename(); // thư mục uploads/, hoặc tự đặt path khác
+        String uuid = UUID.randomUUID().toString();
+        String originalFileName = file.getOriginalFilename();
+        String newFileName = uuid + "-" + originalFileName;
 
+        // objectPath sử dụng tên file mới
+        String objectPath = "uploads/" + newFileName;
         String uploadUrl = String.format("%s/storage/v1/object/%s/%s", SUPABASE_URL, BUCKET, objectPath);
 
         HttpHeaders headers = new HttpHeaders();

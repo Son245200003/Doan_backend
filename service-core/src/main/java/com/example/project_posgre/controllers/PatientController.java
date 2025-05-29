@@ -59,10 +59,6 @@ public class PatientController {
 
         return patientService.findByIdentityCardOrPhone(identityCard, phoneNumber);
     }
-    @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
-        String fileUrl = supabaseService.uploadToSupabase(file);
-        return ResponseEntity.ok(fileUrl);
-    }
+
 
 }

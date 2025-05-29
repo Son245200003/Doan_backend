@@ -9,9 +9,6 @@ import java.util.List;
 @Data
 public class InvoiceRequestDTO {
     private Long patientId;
-    private Long appointmentId;
-    private Long prescriptionId;
-    private String source; // CLINIC, INPATIENT
     private Date invoiceDate;
     private BigDecimal totalAmount;
     private BigDecimal discount;
@@ -20,7 +17,6 @@ public class InvoiceRequestDTO {
     private String paymentMethod; // CASH, CARD, TRANSFER
     private String status; // PENDING, PAID, CANCELLED
     private String notes;
-    private Long createdById;
     private List<InvoiceDetailRequestDTO> invoiceDetails;
 
 }

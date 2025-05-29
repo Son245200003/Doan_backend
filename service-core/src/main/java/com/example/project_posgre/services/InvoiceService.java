@@ -11,5 +11,6 @@ public interface InvoiceService {
     void deleteInvoice(Long id);
     Invoice getInvoiceById(Long id);
     List<Invoice> getAllInvoices();
+    List<Invoice> getInvoicesByPatient(Long idPatient);
 }
 

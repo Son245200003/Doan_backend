@@ -59,7 +59,13 @@ public class Admission {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_pay")
+    private Status statusPay = Status.UNPAID; // UNPAID/PAID
 
+    public enum Status {
+        UNPAID, PAID
+    }
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

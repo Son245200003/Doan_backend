@@ -28,6 +28,7 @@ public class AdmissionServiceImpl implements AdmissionService {
     @Override
     public Admission createAdmission(Admission admission) {
         admission.setStatus(Admission.AdmissionStatus.TREATING);
+        admission.setStatusPay(Admission.Status.UNPAID);
         return admissionRepository.save(admission);
     }
 

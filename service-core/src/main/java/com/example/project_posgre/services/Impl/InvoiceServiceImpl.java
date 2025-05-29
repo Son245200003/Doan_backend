@@ -3,6 +3,7 @@ package com.example.project_posgre.services.Impl;
 import com.example.project_posgre.dtos.requests.InvoiceRequestDTO;
 import com.example.project_posgre.models.Invoice;
 import com.example.project_posgre.models.InvoiceDetail;
+import com.example.project_posgre.models.Patient;
 import com.example.project_posgre.repository.*;
 import com.example.project_posgre.services.InvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +25,13 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceDetailRepository invoiceDetailRepository;
     private final ServiceRepository serviceRepository;
     private final MedicineRepository medicineRepository;
+    private final AdmissionRepository admissionRepository;
+    private final PatientServiceRepository patientServiceRepository;
+
     @Override
     public Invoice createInvoice(InvoiceRequestDTO dto) {
         Invoice invoice = new Invoice();
         invoice.setPatient(patientRepository.findById(dto.getPatientId()).orElseThrow());
-        invoice.setAppointment(appointmentRepository.findById(dto.getAppointmentId()).orElse(null));
-        invoice.setPrescription(prescriptionRepository.findById(dto.getPrescriptionId()).orElse(null));
-        invoice.setSource(Invoice.InvoiceSource.valueOf(dto.getSource()));
         invoice.setInvoiceDate(dto.getInvoiceDate());
         invoice.setTotalAmount(dto.getTotalAmount());
         invoice.setDiscount(dto.getDiscount());
@@ -39,7 +40,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setPaymentMethod(Invoice.PaymentMethod.valueOf(dto.getPaymentMethod()));
         invoice.setStatus(Invoice.InvoiceStatus.valueOf(dto.getStatus()));
         invoice.setNotes(dto.getNotes());
-        invoice.setCreatedBy(userRepository.findById(dto.getCreatedById()).orElseThrow());
 
 // convert InvoiceDetailRequestDTO
         List<InvoiceDetail> details = dto.getInvoiceDetails().stream().map(detailDTO -> {
@@ -59,6 +59,10 @@ public class InvoiceServiceImpl implements InvoiceService {
         }).toList();
 
         invoice.setInvoiceDetails(details);
+
+        admissionRepository.markAllAdmissionsPaidByPatient(dto.getPatientId());
+        prescriptionRepository.markAllPrescriptionsPaidByPatient(dto.getPatientId());
+        patientServiceRepository.markAllPatientServicesPaidByPatient(dto.getPatientId());
         return invoiceRepository.save(invoice);
     }
 
@@ -69,13 +73,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Cập nhật các field
         existing.setPatient(patientRepository.findById(dto.getPatientId()).orElseThrow());
-        existing.setAppointment(dto.getAppointmentId() != null
-                ? appointmentRepository.findById(dto.getAppointmentId()).orElse(null)
-                : null);
-        existing.setPrescription(dto.getPrescriptionId() != null
-                ? prescriptionRepository.findById(dto.getPrescriptionId()).orElse(null)
-                : null);
-        existing.setSource(Invoice.InvoiceSource.valueOf(dto.getSource()));
         existing.setInvoiceDate(dto.getInvoiceDate());
         existing.setTotalAmount(dto.getTotalAmount());
         existing.setDiscount(dto.getDiscount());
@@ -86,8 +83,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         existing.setNotes(dto.getNotes());
 
         // Cập nhật createdBy nếu cần (hoặc có thể không cho sửa)
-        existing.setCreatedBy(userRepository.findById(dto.getCreatedById()).orElseThrow());
-
         // Xóa danh sách cũ (nếu cascade = ALL sẽ tự xóa trong DB)
         existing.getInvoiceDetails().clear();
 
@@ -128,5 +123,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAllByOrderByIdAsc();
+    }
+
+    @Override
+    public List<Invoice> getInvoicesByPatient(Long idPatient) {
+        Patient patient = patientRepository.findById(idPatient).orElse(null);
+        return invoiceRepository.findAllByPatientOrderByIdAsc(patient);
     }
 }
