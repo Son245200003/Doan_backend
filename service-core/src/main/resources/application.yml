@@ -37,4 +37,10 @@ jwt:
   refreshKey: dYOd6awV6VhxKqZFYke5qCE43jy8IT0BAhMPT+Cqrp4=
   resetKey: GiN0mfEESNvE/b4qFiFoUHC5taclo848pAjDyPlDBAk=
 api:
-  prefix: api
+  prefix: apiz
+vnpay:
+  tmncode: 6XQZK7KQ
+  hashsecret: QK78SNTOVW0I6S1ML7BDSJW9WSAH0T5M
+  url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  returnurl: https://localhost:3000/dashboard/payment/vnpay-return
+  ipnurl: https://localhost:8081/api/payment/vnpay-ipn
