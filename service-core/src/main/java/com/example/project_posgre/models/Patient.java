@@ -56,10 +56,6 @@ public class Patient {
     @Column(name = "blood_type")
     private String bloodType; // Nhóm máu
 
-//    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
-//    private List<MedicalRecord> medicalRecords = new ArrayList<>();
-
     @Column(name = "allergies", columnDefinition = "TEXT")
     private String allergies; // Dị ứng thuốc
 

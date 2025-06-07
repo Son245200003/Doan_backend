@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findAllByOrderByIdAsc();
-    List<Invoice> findAllByPatientOrderByIdAsc(Patient patient);
+    List<Invoice> findAllByPatientIdOrderByIdAsc(Long id);
 
 }

@@ -60,7 +60,7 @@ public class UserController {
     }
     @PostMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id, @RequestParam Boolean active) {
+    public ResponseEntity<?> activeUser(@PathVariable Long id, @RequestParam Boolean active) {
         userService.blockOrEnable(id,active);
 
         // Trả về danh sách UserResponse

@@ -1,9 +1,7 @@
 package com.example.project_posgre.services.Impl;
 
 import com.example.project_posgre.dtos.requests.InvoiceRequestDTO;
-import com.example.project_posgre.models.Invoice;
-import com.example.project_posgre.models.InvoiceDetail;
-import com.example.project_posgre.models.Patient;
+import com.example.project_posgre.models.*;
 import com.example.project_posgre.repository.*;
 import com.example.project_posgre.services.InvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +25,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final MedicineRepository medicineRepository;
     private final AdmissionRepository admissionRepository;
     private final PatientServiceRepository patientServiceRepository;
+    private final BedRepository bedRepository;
 
     @Override
     public Invoice createInvoice(InvoiceRequestDTO dto) {
@@ -49,7 +48,20 @@ public class InvoiceServiceImpl implements InvoiceService {
                 detail.setService(serviceRepository.findById(detailDTO.getServiceId()).orElse(null));
             }
             if (detailDTO.getMedicineId() != null) {
+                Medicine medicine=medicineRepository.findById(detailDTO.getMedicineId()).orElse(null);
+                int remain = medicine.getStockQuantity() - detailDTO.getQuantity();
+                if (remain < 0) {
+                    throw new IllegalArgumentException("Không đủ số lượng thuốc trong kho");
+                }
+                medicine.setStockQuantity(remain);
+                medicineRepository.save(medicine);
                 detail.setMedicine(medicineRepository.findById(detailDTO.getMedicineId()).orElse(null));
+            }
+            if (detailDTO.getBedId() != null) {
+                Bed bed= bedRepository.findById(detailDTO.getBedId()).orElse(null);
+                bed.setStatus(Bed.BedStatus.AVAILABLE);
+                bedRepository.save(bed);
+                detail.setBed(bed);
             }
             detail.setQuantity(detailDTO.getQuantity());
             detail.setUnitPrice(detailDTO.getUnitPrice());
@@ -127,7 +139,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<Invoice> getInvoicesByPatient(Long idPatient) {
-        Patient patient = patientRepository.findById(idPatient).orElse(null);
-        return invoiceRepository.findAllByPatientOrderByIdAsc(patient);
+//        Patient patient = patientRepository.findById(idPatient).orElse(null);
+        return invoiceRepository.findAllByPatientIdOrderByIdAsc(idPatient);
     }
 }

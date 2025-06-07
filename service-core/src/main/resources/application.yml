@@ -3,6 +3,10 @@ server:
   port: 8081
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/demo?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
     driver-class-name: org.postgresql.Driver
@@ -37,10 +41,11 @@ jwt:
   refreshKey: dYOd6awV6VhxKqZFYke5qCE43jy8IT0BAhMPT+Cqrp4=
   resetKey: GiN0mfEESNvE/b4qFiFoUHC5taclo848pAjDyPlDBAk=
 api:
-  prefix: apiz
+  prefix: api
 vnpay:
   tmncode: 6XQZK7KQ
   hashsecret: QK78SNTOVW0I6S1ML7BDSJW9WSAH0T5M
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-  returnurl: https://localhost:3000/dashboard/payment/vnpay-return
-  ipnurl: https://localhost:8081/api/payment/vnpay-ipn
+  returnurl: http://localhost:3000/dashboard/payment/vnpay-return
+  ipnurl: http://localhost:8081/api/payment/vnpay-ipn
+

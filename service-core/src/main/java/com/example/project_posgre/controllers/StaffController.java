@@ -91,14 +91,11 @@ public class StaffController {
                 return ResponseEntity.notFound().build();
             }
 
-            // Lấy content-type động (dựa trên file thực)
             String contentType = Files.probeContentType(filePath);
             if (contentType == null) {
                 contentType = "application/octet-stream"; // fallback
             }
 
-            // Nếu muốn download file: dùng attachment
-            // Nếu muốn preview: dùng inline
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION,
                             "inline; filename=\"" + resource.getFilename() + "\"")

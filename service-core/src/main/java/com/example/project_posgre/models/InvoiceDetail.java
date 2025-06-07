@@ -26,7 +26,9 @@ public class InvoiceDetail {
     @ManyToOne
     @JoinColumn(name = "service_id")
     private Service service;
-
+    @ManyToOne
+    @JoinColumn(name = "bed_id")
+    private Bed bed;
     @ManyToOne
     @JoinColumn(name = "medicine_id")
     private Medicine medicine;

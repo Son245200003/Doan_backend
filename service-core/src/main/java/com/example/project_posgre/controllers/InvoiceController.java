@@ -56,7 +56,6 @@ public class InvoiceController {
     }
     @GetMapping("/pending/group-detail")
     public UnpaidInvoiceDTO.UnpaidAllTypeDTO getUnpaidGroupDetail(@RequestParam Long patientId) {
-        // 1. Dịch vụ chưa thanh toán
         List<PatientService> unpaidServices = patientServiceRepository.findByPatientIdAndStatus(patientId, PatientService.Status.UNPAID);
         List<UnpaidInvoiceDTO.UnpaidServiceDTO> services = unpaidServices.stream().map(ps -> {
             Service s = ps.getService();
@@ -71,7 +70,6 @@ public class InvoiceController {
                 .map(UnpaidInvoiceDTO.UnpaidServiceDTO::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // 2. Thuốc trong các đơn thuốc chưa thanh toán
         List<Prescription> unpaidPres = prescriptionRepository.findByPatientIdAndStatus(patientId, Prescription.Status.UNPAID);
         List<UnpaidInvoiceDTO.UnpaidMedicineDTO> medicines = new ArrayList<>();
         for (Prescription p : unpaidPres) {
@@ -115,6 +113,7 @@ public class InvoiceController {
                     a.getId(),
                     "Giường " + bed.getId(),
                     "Phòng " + bed.getRoom().getRoomName(),
+                    a.getBed().getId(),
                     (int) days,
                     unitPrice,
                     totalRoomPrice,

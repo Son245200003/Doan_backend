@@ -37,6 +37,7 @@ public class UnpaidInvoiceDTO {
         private Long admissionId;
         private String bedName;
         private String roomName;
+        private Long bedId;
         private int days;
         private BigDecimal unitPrice;
         private BigDecimal totalPrice;

@@ -14,4 +14,6 @@ public interface PrescriptionRepository extends JpaRepository<Prescription, Long
     @Transactional
     @Query("UPDATE Prescription p SET p.status = com.example.project_posgre.models.Prescription.Status.PAID WHERE p.patient.id = :patientId AND p.status = com.example.project_posgre.models.Prescription.Status.UNPAID")
     int markAllPrescriptionsPaidByPatient(Long patientId);
+
+    List<Prescription> findAllByPatientId(Long patientId);
 }

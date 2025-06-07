@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 public class InvoiceDetailRequestDTO {
     private Long serviceId;   // optional
     private Long medicineId;  // optional
+    private Long bedId;
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal amount;

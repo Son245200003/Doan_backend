@@ -1,6 +1,7 @@
 package com.example.project_posgre.controllers;
 
 import com.example.project_posgre.models.Prescription;
+import com.example.project_posgre.repository.PrescriptionRepository;
 import com.example.project_posgre.services.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,8 @@ public class PrescriptionController {
 
     @Autowired
     private PrescriptionService service;
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
 
     @GetMapping
     public List<Prescription> getAll() {
@@ -22,6 +25,10 @@ public class PrescriptionController {
     @GetMapping("/{id}")
     public Prescription getById(@PathVariable Long id) {
         return service.findById(id);
+    }
+    @GetMapping("/patient/{id}")
+    public List<Prescription> getByPatientId(@PathVariable Long id) {
+        return prescriptionRepository.findAllByPatientId(id);
     }
 
     @PostMapping

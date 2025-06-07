@@ -1,7 +1,9 @@
 package com.example.project_posgre.services.Impl;
 
 import com.example.project_posgre.models.Admission;
+import com.example.project_posgre.models.Bed;
 import com.example.project_posgre.repository.AdmissionRepository;
+import com.example.project_posgre.repository.BedRepository;
 import com.example.project_posgre.services.AdmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ public class AdmissionServiceImpl implements AdmissionService {
 
     @Autowired
     private AdmissionRepository admissionRepository;
+    @Autowired
+    private BedRepository bedRepository;
 
     @Override
     public List<Admission> getAllAdmissions() {
@@ -27,6 +31,9 @@ public class AdmissionServiceImpl implements AdmissionService {
 
     @Override
     public Admission createAdmission(Admission admission) {
+        Bed bed= bedRepository.findById(admission.getBed().getId()).orElse(null);
+        bed.setStatus(Bed.BedStatus.OCCUPIED);
+        bedRepository.save(bed);
         admission.setStatus(Admission.AdmissionStatus.TREATING);
         admission.setStatusPay(Admission.Status.UNPAID);
         return admissionRepository.save(admission);
